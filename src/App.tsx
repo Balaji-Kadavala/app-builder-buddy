@@ -7,6 +7,7 @@ import { StudentLayout } from "./components/layout/StudentLayout";
 import { AdminLayout } from "./components/layout/AdminLayout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
 import Dashboard from "./pages/Dashboard";
 import Attendance from "./pages/Attendance";
 import Profile from "./pages/Profile";
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/offline" element={<Offline />} />
 
           {/* Student Routes */}
