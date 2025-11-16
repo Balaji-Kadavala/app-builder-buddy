@@ -14,16 +14,315 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      attendance_records: {
+        Row: {
+          created_at: string
+          id: string
+          location_lat: number | null
+          location_lng: number | null
+          session_type: string
+          status: string | null
+          student_id: string
+          timestamp: string
+          verification_method: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          location_lat?: number | null
+          location_lng?: number | null
+          session_type: string
+          status?: string | null
+          student_id: string
+          timestamp?: string
+          verification_method?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          location_lat?: number | null
+          location_lng?: number | null
+          session_type?: string
+          status?: string | null
+          student_id?: string
+          timestamp?: string
+          verification_method?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_records_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      attendance_windows: {
+        Row: {
+          active_status: boolean
+          created_at: string
+          days_active: string[] | null
+          end_time: string
+          id: string
+          location_required: boolean
+          session_name: string
+          start_time: string
+        }
+        Insert: {
+          active_status?: boolean
+          created_at?: string
+          days_active?: string[] | null
+          end_time: string
+          id?: string
+          location_required?: boolean
+          session_name: string
+          start_time: string
+        }
+        Update: {
+          active_status?: boolean
+          created_at?: string
+          days_active?: string[] | null
+          end_time?: string
+          id?: string
+          location_required?: boolean
+          session_name?: string
+          start_time?: string
+        }
+        Relationships: []
+      }
+      biometric_data: {
+        Row: {
+          active_status: boolean
+          created_at: string
+          face_embedding_encrypted: string
+          id: string
+          student_id: string
+          version: number
+        }
+        Insert: {
+          active_status?: boolean
+          created_at?: string
+          face_embedding_encrypted: string
+          id?: string
+          student_id: string
+          version?: number
+        }
+        Update: {
+          active_status?: boolean
+          created_at?: string
+          face_embedding_encrypted?: string
+          id?: string
+          student_id?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "biometric_data_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      device_registrations: {
+        Row: {
+          device_fingerprint: string
+          device_name: string | null
+          id: string
+          last_used: string
+          registered_at: string
+          status: string | null
+          student_id: string
+          switch_count: number
+        }
+        Insert: {
+          device_fingerprint: string
+          device_name?: string | null
+          id?: string
+          last_used?: string
+          registered_at?: string
+          status?: string | null
+          student_id: string
+          switch_count?: number
+        }
+        Update: {
+          device_fingerprint?: string
+          device_name?: string | null
+          id?: string
+          last_used?: string
+          registered_at?: string
+          status?: string | null
+          student_id?: string
+          switch_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "device_registrations_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      device_switch_requests: {
+        Row: {
+          id: string
+          new_device_fingerprint: string
+          old_device_fingerprint: string
+          reason: string | null
+          requested_at: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+          student_id: string
+        }
+        Insert: {
+          id?: string
+          new_device_fingerprint: string
+          old_device_fingerprint: string
+          reason?: string | null
+          requested_at?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          student_id: string
+        }
+        Update: {
+          id?: string
+          new_device_fingerprint?: string
+          old_device_fingerprint?: string
+          reason?: string | null
+          requested_at?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "device_switch_requests_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      locations: {
+        Row: {
+          active_status: boolean
+          classroom_id: string | null
+          created_at: string
+          id: string
+          latitude: number
+          longitude: number
+          name: string
+          radius: number
+        }
+        Insert: {
+          active_status?: boolean
+          classroom_id?: string | null
+          created_at?: string
+          id?: string
+          latitude: number
+          longitude: number
+          name: string
+          radius?: number
+        }
+        Update: {
+          active_status?: boolean
+          classroom_id?: string | null
+          created_at?: string
+          id?: string
+          latitude?: number
+          longitude?: number
+          name?: string
+          radius?: number
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          attendance_percentage: number | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          profile_photo_url: string | null
+          roll_number: string | null
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          attendance_percentage?: number | null
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          profile_photo_url?: string | null
+          roll_number?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          attendance_percentage?: number | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          profile_photo_url?: string | null
+          roll_number?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      calculate_attendance_percentage: {
+        Args: { _student_id: string }
+        Returns: number
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "student"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +449,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "student"],
+    },
   },
 } as const
