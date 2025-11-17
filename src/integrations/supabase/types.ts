@@ -91,6 +91,39 @@ export type Database = {
         }
         Relationships: []
       }
+      audit_logs: {
+        Row: {
+          action: string
+          id: string
+          old_data: Json | null
+          performed_at: string
+          performed_by: string | null
+          reason: string | null
+          record_id: string
+          table_name: string
+        }
+        Insert: {
+          action: string
+          id?: string
+          old_data?: Json | null
+          performed_at?: string
+          performed_by?: string | null
+          reason?: string | null
+          record_id: string
+          table_name: string
+        }
+        Update: {
+          action?: string
+          id?: string
+          old_data?: Json | null
+          performed_at?: string
+          performed_by?: string | null
+          reason?: string | null
+          record_id?: string
+          table_name?: string
+        }
+        Relationships: []
+      }
       biometric_data: {
         Row: {
           active_status: boolean
