@@ -55,16 +55,29 @@ export function FaceCapture({ onCapture, onBack }: FaceCaptureProps) {
       if (ctx) {
         ctx.drawImage(videoRef.current, 0, 0);
         const imageData = canvas.toDataURL("image/jpeg");
-        setCapturedImages(prev => ({ ...prev, [currentAngle]: imageData }));
         
-        // Move to next angle or finish
-        const currentIndex = angles.findIndex(a => a.key === currentAngle);
-        if (currentIndex < angles.length - 1) {
-          setCurrentAngle(angles[currentIndex + 1].key as any);
-        }
+        setCapturedImages(prev => {
+          const newImages = { ...prev, [currentAngle]: imageData };
+          
+          // Move to next angle automatically
+          const currentIndex = angles.findIndex(a => a.key === currentAngle);
+          if (currentIndex < angles.length - 1) {
+            setCurrentAngle(angles[currentIndex + 1].key as any);
+          }
+          
+          // If all three images are captured, call onCapture automatically
+          if (Object.keys(newImages).length === 3) {
+            setTimeout(() => {
+              stopCamera();
+              onCapture(Object.values(newImages));
+            }, 500);
+          }
+          
+          return newImages;
+        });
       }
     }
-  }, [currentAngle]);
+  }, [currentAngle, onCapture]);
 
   const handleComplete = () => {
     stopCamera();
