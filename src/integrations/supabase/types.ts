@@ -320,6 +320,26 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_within_attendance_window: { Args: never; Returns: boolean }
+      is_within_radius: {
+        Args: {
+          class_lat: number
+          class_lng: number
+          radius_meters: number
+          user_lat: number
+          user_lng: number
+        }
+        Returns: boolean
+      }
+      secure_insert_attendance: {
+        Args: {
+          p_session_type: string
+          p_status: string
+          p_student_id: string
+          p_verification_method: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role: "admin" | "student"

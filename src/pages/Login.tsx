@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { NavLink } from "@/components/NavLink";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,7 +16,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
-  const [role, setRole] = useState<"student" | "admin">("student");
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -34,13 +33,26 @@ export default function Login() {
 
       if (error) throw error;
 
+      // Fetch user role from database
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', authData.user.id)
+        .maybeSingle();
+
+      if (roleError) {
+        throw new Error('Failed to fetch user role');
+      }
+
+      const userRole = roleData?.role || 'student';
+
       toast({
         title: "Login successful",
         description: "Welcome back!",
       });
 
-      // Navigate based on role
-      if (role === "admin") {
+      // Navigate based on database role
+      if (userRole === "admin") {
         navigate("/admin-dashboard");
       } else {
         navigate("/dashboard");
@@ -71,46 +83,21 @@ export default function Login() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="student" className="w-full" onValueChange={(v) => setRole(v as "student" | "admin")}>
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="student">Student</TabsTrigger>
-              <TabsTrigger value="admin">Admin</TabsTrigger>
-            </TabsList>
-            <TabsContent value="student" className="space-y-4 mt-4">
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="student@example.com" {...register("email")} />
-                  {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <PasswordInput id="password" placeholder="Enter your password" {...register("password")} />
-                  {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
-                </div>
-                <Button className="w-full" type="submit" disabled={isLoading}>
-                  {isLoading ? "Signing in..." : "Sign In as Student"}
-                </Button>
-              </form>
-            </TabsContent>
-            <TabsContent value="admin" className="space-y-4 mt-4">
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="admin-email">Email</Label>
-                  <Input id="admin-email" type="email" placeholder="admin@example.com" {...register("email")} />
-                  {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="admin-password">Password</Label>
-                  <PasswordInput id="admin-password" placeholder="Enter your password" {...register("password")} />
-                  {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
-                </div>
-                <Button className="w-full" type="submit" disabled={isLoading}>
-                  {isLoading ? "Signing in..." : "Sign In as Admin"}
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" placeholder="your.email@example.com" {...register("email")} />
+              {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <PasswordInput id="password" placeholder="Enter your password" {...register("password")} />
+              {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
+            </div>
+            <Button className="w-full" type="submit" disabled={isLoading}>
+              {isLoading ? "Signing in..." : "Sign In"}
+            </Button>
+          </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
           <NavLink to="/forgot-password" className="text-sm text-primary hover:underline">
